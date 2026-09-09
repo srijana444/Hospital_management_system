@@ -1,0 +1,77 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Billing - MediCare{% endblock %}
+{% block page_title %}Billing{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Billing Management</h1>
+        <div class="subtitle">Generate and track patient bills</div>
+    </div>
+    <a href="{% url 'add_bill' %}" class="btn btn-primary">
+        <i class="bi bi-receipt me-1"></i> Generate Bill
+    </a>
+</div>
+
+<div class="card-modern">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-modern">
+                <thead>
+                    <tr>
+                        <th>Bill Number</th>
+                        <th>Patient</th>
+                        <th>Date</th>
+                        <th>Total Amount</th>
+                        <th>Payment Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bill in bills %}
+                    <tr>
+                        <td><span class="fw-600 text-primary">{{ bill.bill_number }}</span></td>
+                        <td>{{ bill.patient.full_name }}</td>
+                        <td>{{ bill.bill_date|date:"Y-m-d" }}</td>
+                        <td class="fw-600">₹{{ bill.total_amount }}</td>
+                        <td>
+                            {% if bill.payment_status == 'Paid' %}
+                                <span class="badge-status badge-paid"><i class="bi bi-check-circle"></i> Paid</span>
+                            {% elif bill.payment_status == 'Pending' %}
+                                <span class="badge-status badge-pending"><i class="bi bi-hourglass-split"></i> Pending</span>
+                            {% else %}
+                                <span class="badge-status badge-partial"><i class="bi bi-pie-chart"></i> Partially Paid</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="{% url 'bill_detail' bill.id %}" class="btn btn-sm btn-outline-primary btn-icon" title="View">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'edit_bill' bill.id %}" class="btn btn-sm btn-outline-warning btn-icon" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'delete_bill' bill.id %}" class="btn btn-sm btn-outline-danger btn-icon" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <i class="bi bi-receipt"></i>
+                                <p>No bills found.</p>
+                                <a href="{% url 'add_bill' %}" class="btn btn-primary btn-sm mt-2">Generate First Bill</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

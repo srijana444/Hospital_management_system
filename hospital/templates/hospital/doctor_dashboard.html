@@ -1,0 +1,62 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Doctor Dashboard - MediCare{% endblock %}
+{% block page_title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Welcome, Dr. {{ doctor.full_name }}</h1>
+        <div class="subtitle">{{ doctor.specialization }} · {{ doctor.experience }} years experience</div>
+    </div>
+</div>
+
+<div class="card-modern">
+    <div class="card-header">
+        <span><i class="bi bi-calendar2-check me-2 text-primary"></i>My Appointments</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-modern">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td class="fw-600">{{ appointment.patient.full_name }}</td>
+                        <td>{{ appointment.appointment_date }}</td>
+                        <td>{{ appointment.appointment_time }}</td>
+                        <td>{{ appointment.reason|truncatechars:40 }}</td>
+                        <td>
+                            {% if appointment.status == 'Scheduled' %}
+                                <span class="badge-status badge-scheduled">Scheduled</span>
+                            {% elif appointment.status == 'Completed' %}
+                                <span class="badge-status badge-completed">Completed</span>
+                            {% else %}
+                                <span class="badge-status badge-cancelled">Cancelled</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="bi bi-calendar2-x"></i>
+                                <p>No appointments assigned.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

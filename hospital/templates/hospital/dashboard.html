@@ -1,0 +1,48 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Dashboard - MediCare{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Hospital Dashboard</h1>
+        <div class="subtitle">Overview of key metrics</div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon patients"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-value">{{ patients_count }}</div>
+            <div class="stat-label">Patients</div>
+            <a href="{% url 'patient_list' %}" class="stat-link">View Patients <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon doctors"><i class="bi bi-person-badge-fill"></i></div>
+            <div class="stat-value">{{ doctors_count }}</div>
+            <div class="stat-label">Doctors</div>
+            <a href="{% url 'doctor_list' %}" class="stat-link">View Doctors <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon appointments"><i class="bi bi-calendar2-check-fill"></i></div>
+            <div class="stat-value">{{ appointments_count }}</div>
+            <div class="stat-label">Appointments</div>
+            <a href="{% url 'appointment_list' %}" class="stat-link">View Appointments <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon bills"><i class="bi bi-receipt"></i></div>
+            <div class="stat-value">{{ bills_count }}</div>
+            <div class="stat-label">Bills</div>
+            <a href="{% url 'bill_list' %}" class="stat-link">View Bills <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+</div>
+{% endblock %}

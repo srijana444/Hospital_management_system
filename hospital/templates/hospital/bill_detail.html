@@ -1,0 +1,77 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Bill Details - MediCare{% endblock %}
+{% block page_title %}Bill Details{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Bill {{ bill.bill_number }}</h1>
+        <div class="subtitle">Patient: {{ bill.patient.full_name }}</div>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'edit_bill' bill.id %}" class="btn btn-outline-warning btn-sm">
+            <i class="bi bi-pencil me-1"></i> Edit
+        </a>
+        <a href="{% url 'bill_list' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="card-modern">
+    <div class="card-header">Billing Information</div>
+    <div class="card-body">
+        <div class="detail-grid">
+            <div class="detail-item">
+                <label>Bill Number</label>
+                <div class="value">{{ bill.bill_number }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Patient</label>
+                <div class="value">{{ bill.patient.full_name }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Bill Date</label>
+                <div class="value">{{ bill.bill_date|date:"Y-m-d H:i" }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Payment Status</label>
+                <div class="value">
+                    {% if bill.payment_status == 'Paid' %}
+                        <span class="badge-status badge-paid">Paid</span>
+                    {% elif bill.payment_status == 'Pending' %}
+                        <span class="badge-status badge-pending">Pending</span>
+                    {% else %}
+                        <span class="badge-status badge-partial">Partially Paid</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="detail-item">
+                <label>Consultation Fee</label>
+                <div class="value">₹{{ bill.consultation_fee }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Medicine Charges</label>
+                <div class="value">₹{{ bill.medicine_charges }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Lab Charges</label>
+                <div class="value">₹{{ bill.lab_charges }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Other Charges</label>
+                <div class="value">₹{{ bill.other_charges }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Total Amount</label>
+                <div class="value fw-600" style="font-size:1.15rem;color:var(--primary);">₹{{ bill.total_amount }}</div>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;">
+                <label>Notes</label>
+                <div class="value">{{ bill.notes|default:"—" }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

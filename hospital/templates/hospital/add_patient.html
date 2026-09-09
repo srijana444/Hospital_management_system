@@ -1,0 +1,39 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Add Patient - MediCare{% endblock %}
+{% block page_title %}Add Patient{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Add New Patient</h1>
+        <div class="subtitle">Register a new patient in the system</div>
+    </div>
+    <a href="{% url 'patient_list' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back
+    </a>
+</div>
+
+<div class="form-section" style="max-width:720px;">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row g-3">
+            {% for field in form %}
+            <div class="col-md-6">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-lg me-1"></i> Save Patient
+            </button>
+            <a href="{% url 'patient_list' %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

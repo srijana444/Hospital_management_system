@@ -1,0 +1,88 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Staff Dashboard - MediCare{% endblock %}
+{% block page_title %}Staff Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Welcome back{% if request.user.first_name %}, {{ request.user.first_name }}{% endif %}</h1>
+        <div class="subtitle">Hospital Staff Overview</div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon patients"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-value">{{ patients_count|default:"—" }}</div>
+            <div class="stat-label">Total Patients</div>
+            <a href="{% url 'patient_list' %}" class="stat-link">Manage Patients <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon doctors"><i class="bi bi-person-badge-fill"></i></div>
+            <div class="stat-value">{{ doctors_count|default:"—" }}</div>
+            <div class="stat-label">Total Doctors</div>
+            <a href="{% url 'doctor_list' %}" class="stat-link">Manage Doctors <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon appointments"><i class="bi bi-calendar2-check-fill"></i></div>
+            <div class="stat-value">{{ appointments_count|default:"—" }}</div>
+            <div class="stat-label">Appointments</div>
+            <a href="{% url 'appointment_list' %}" class="stat-link">View Appointments <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon bills"><i class="bi bi-receipt"></i></div>
+            <div class="stat-value">{{ bills_count|default:"—" }}</div>
+            <div class="stat-label">Total Bills</div>
+            <a href="{% url 'bill_list' %}" class="stat-link">Manage Billing <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card-modern">
+            <div class="card-header">
+                <span><i class="bi bi-lightning-charge me-2 text-warning"></i>Quick Actions</span>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'add_patient' %}" class="btn btn-outline-primary text-start">
+                        <i class="bi bi-person-plus me-2"></i> Add New Patient
+                    </a>
+                    <a href="{% url 'add_doctor' %}" class="btn btn-outline-primary text-start">
+                        <i class="bi bi-person-badge me-2"></i> Add New Doctor
+                    </a>
+                    <a href="{% url 'add_appointment' %}" class="btn btn-outline-primary text-start">
+                        <i class="bi bi-calendar-plus me-2"></i> Schedule Appointment
+                    </a>
+                    <a href="{% url 'add_bill' %}" class="btn btn-outline-primary text-start">
+                        <i class="bi bi-receipt me-2"></i> Create Bill
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card-modern">
+            <div class="card-header">
+                <span><i class="bi bi-info-circle me-2 text-info"></i>System Info</span>
+            </div>
+            <div class="card-body">
+                <p class="mb-2 text-muted-2">You are logged in as <strong>Hospital Staff</strong>.</p>
+                <p class="mb-0 text-muted-2" style="font-size:0.9rem;">
+                    Use the sidebar to navigate between Patients, Doctors, Appointments, and Billing modules.
+                    All changes are saved instantly to the database.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

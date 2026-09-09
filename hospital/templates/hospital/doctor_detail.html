@@ -1,0 +1,82 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}
+Doctor Details
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">Doctor Details</h1>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <h3>Dr. {{ doctor.full_name }}</h3>
+
+        <hr>
+
+        <p>
+            <strong>Doctor ID:</strong>
+            {{ doctor.doctor_id }}
+        </p>
+
+        <p>
+            <strong>Gender:</strong>
+            {{ doctor.gender }}
+        </p>
+
+        <p>
+            <strong>Specialization:</strong>
+            {{ doctor.specialization }}
+        </p>
+
+        <p>
+            <strong>Qualification:</strong>
+            {{ doctor.qualification }}
+        </p>
+
+        <p>
+            <strong>Experience:</strong>
+            {{ doctor.experience }} years
+        </p>
+
+        <p>
+            <strong>Phone:</strong>
+            {{ doctor.phone }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ doctor.email }}
+        </p>
+
+        <p>
+            <strong>Address:</strong>
+            {{ doctor.address }}
+        </p>
+
+        <p>
+            <strong>Consultation Fee:</strong>
+            Rs. {{ doctor.consultation_fee }}
+        </p>
+
+        <hr>
+
+        <a
+            href="{% url 'edit_doctor' doctor.id %}"
+            class="btn btn-warning">
+            Edit
+        </a>
+
+        <a
+            href="{% url 'doctor_list' %}"
+            class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

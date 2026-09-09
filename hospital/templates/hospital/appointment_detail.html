@@ -1,0 +1,65 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Appointment Details - MediCare{% endblock %}
+{% block page_title %}Appointment Details{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Appointment Details</h1>
+        <div class="subtitle">{{ appointment.patient.full_name }} with Dr. {{ appointment.doctor.full_name }}</div>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'edit_appointment' appointment.id %}" class="btn btn-outline-warning btn-sm">
+            <i class="bi bi-pencil me-1"></i> Edit
+        </a>
+        <a href="{% url 'appointment_list' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back
+        </a>
+    </div>
+</div>
+
+<div class="card-modern">
+    <div class="card-header">Appointment Information</div>
+    <div class="card-body">
+        <div class="detail-grid">
+            <div class="detail-item">
+                <label>Patient</label>
+                <div class="value">{{ appointment.patient.full_name }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Doctor</label>
+                <div class="value">Dr. {{ appointment.doctor.full_name }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Date</label>
+                <div class="value">{{ appointment.appointment_date }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Time</label>
+                <div class="value">{{ appointment.appointment_time }}</div>
+            </div>
+            <div class="detail-item">
+                <label>Status</label>
+                <div class="value">
+                    {% if appointment.status == 'Scheduled' %}
+                        <span class="badge-status badge-scheduled">Scheduled</span>
+                    {% elif appointment.status == 'Completed' %}
+                        <span class="badge-status badge-completed">Completed</span>
+                    {% else %}
+                        <span class="badge-status badge-cancelled">Cancelled</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;">
+                <label>Reason</label>
+                <div class="value">{{ appointment.reason }}</div>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;">
+                <label>Notes</label>
+                <div class="value">{{ appointment.notes|default:"—" }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
