@@ -45,4 +45,124 @@
         </div>
     </div>
 </div>
+
+<!-- Recent Appointments Section -->
+
+<div class="card-modern mt-4">
+
+    <div class="d-flex justify-content-between align-items-center p-3">
+
+        <div>
+            <h4 class="mb-1">Recent Appointments</h4>
+            <div class="subtitle">
+                Latest patient appointment records
+            </div>
+        </div>
+
+        <a href="{% url 'appointment_list' %}"
+           class="btn btn-primary btn-sm">
+
+            View All
+            <i class="bi bi-arrow-right ms-1"></i>
+
+        </a>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-modern mb-0">
+
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Doctor</th>
+                        <th>Appointment Date</th>
+                        <th>Appointment Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for appointment in recent_appointments %}
+
+                    <tr>
+
+                        <td class="fw-600">
+                            {{ appointment.patient.full_name }}
+                        </td>
+
+                        <td>
+                            Dr. {{ appointment.doctor.full_name }}
+                        </td>
+
+                        <td>
+                            {{ appointment.appointment_date|date:"d M Y" }}
+                        </td>
+
+                        <td class="fw-600">
+                            <i class="bi bi-clock text-primary me-1"></i>
+                            {{ appointment.appointment_time|time:"h:i A" }}
+                        </td>
+
+                        <td>
+
+                            {% if appointment.status == 'Scheduled' %}
+
+                                <span class="badge-status badge-scheduled">
+                                    Scheduled
+                                </span>
+
+                            {% elif appointment.status == 'Completed' %}
+
+                                <span class="badge-status badge-completed">
+                                    Completed
+                                </span>
+
+                            {% elif appointment.status == 'Cancelled' %}
+
+                                <span class="badge-status badge-cancelled">
+                                    Cancelled
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge-status">
+                                    {{ appointment.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="5">
+
+                            <div class="empty-state">
+                                <i class="bi bi-calendar2-x"></i>
+                                <p>No appointments booked yet.</p>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

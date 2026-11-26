@@ -1,0 +1,166 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Edit Doctor Schedule - MediCare{% endblock %}
+{% block page_title %}Edit Doctor Schedule{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Edit Doctor Schedule</h1>
+
+        <div class="subtitle">
+            Update doctor working hours and slot duration
+        </div>
+
+    </div>
+
+    <a
+        href="{% url 'doctor_schedule_list' doctor.id %}"
+        class="btn btn-outline-primary">
+
+        <i class="bi bi-arrow-left me-1"></i>
+
+        Back to Schedules
+
+    </a>
+
+</div>
+
+
+<div class="card-modern">
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Doctor
+                    </label>
+
+                    {{ form.doctor }}
+
+                    {% if form.doctor.errors %}
+                        <div class="text-danger small">
+                            {{ form.doctor.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Day of Week
+                    </label>
+
+                    {{ form.day_of_week }}
+
+                    {% if form.day_of_week.errors %}
+                        <div class="text-danger small">
+                            {{ form.day_of_week.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Start Time
+                    </label>
+
+                    {{ form.start_time }}
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        End Time
+                    </label>
+
+                    {{ form.end_time }}
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Appointment Duration
+                    </label>
+
+                    {{ form.appointment_duration }}
+
+                    <small class="text-muted">
+                        Example: 30 minutes
+                    </small>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label class="form-label d-block">
+                        Availability
+                    </label>
+
+                    <div class="form-check mt-2">
+
+                        {{ form.is_available }}
+
+                        <label class="form-check-label">
+
+                            Doctor is available
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4">
+
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                <i class="bi bi-save me-1"></i>
+
+                Update Schedule
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

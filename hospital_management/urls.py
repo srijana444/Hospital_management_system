@@ -21,7 +21,7 @@ from hospital import views
 urlpatterns = [
 
     path('admin/', admin.site.urls),
-    path('', views.login_view, name='login'),
+    path('', views.login_view, name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
 
     path(
@@ -86,9 +86,22 @@ path(
 
 path(
     'appointments/',
+    views.appointment_departments,
+    name='appointment_departments'
+),
+
+path(
+    'appointments/doctors/<str:specialization>/',
+    views.appointment_doctors,
+    name='appointment_doctors'
+),
+
+path(
+    'appointments/list/',
     views.appointment_list,
     name='appointment_list'
 ),
+
 
 path(
     'appointments/add/',
@@ -112,6 +125,42 @@ path(
     'appointments/<int:id>/delete/',
     views.delete_appointment,
     name='delete_appointment'
+),
+
+path(
+    'appointments/book/<int:doctor_id>/',
+    views.book_appointment,
+    name='book_appointment'
+),
+
+path(
+    'doctors/<int:doctor_id>/schedule/',
+    views.doctor_schedule,
+    name='doctor_schedule'
+),
+
+path(
+    'doctors/<int:doctor_id>/schedule/list/',
+    views.doctor_schedule,
+    name='doctor_schedule_list'
+),
+
+path(
+    'doctors/<int:doctor_id>/schedule/add/',
+    views.add_doctor_schedule,
+    name='add_doctor_schedule'
+),
+
+path(
+    'doctor-schedules/edit/<int:id>/',
+    views.edit_doctor_schedule,
+    name='edit_doctor_schedule'
+),
+
+path(
+    'doctor-schedules/delete/<int:id>/',
+    views.delete_doctor_schedule,
+    name='delete_doctor_schedule'
 ),
 
 path(

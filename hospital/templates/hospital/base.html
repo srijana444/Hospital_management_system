@@ -54,7 +54,7 @@
                 <a href="{% url 'doctor_list' %}" class="nav-link {% if 'doctor' in request.resolver_match.url_name and 'dashboard' not in request.resolver_match.url_name %}active{% endif %}">
                     <i class="bi bi-person-badge"></i> Doctors
                 </a>
-                <a href="{% url 'appointment_list' %}" class="nav-link {% if 'appointment' in request.resolver_match.url_name %}active{% endif %}">
+                <a href="{% url 'appointment_departments' %}" class="nav-link {% if 'appointment' in request.resolver_match.url_name %}active{% endif %}">
                     <i class="bi bi-calendar2-check"></i> Appointments
                 </a>
                 <a href="{% url 'bill_list' %}" class="nav-link {% if 'bill' in request.resolver_match.url_name %}active{% endif %}">

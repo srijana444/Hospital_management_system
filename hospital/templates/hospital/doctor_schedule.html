@@ -1,0 +1,158 @@
+
+{% extends 'hospital/base.html' %}
+
+{% block title %}Doctor Schedule - MediCare{% endblock %}
+{% block page_title %}Doctor Schedule{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3>Doctor Schedule</h3>
+            <p class="text-muted mb-0">
+                Manage the doctor's working days and availability.
+            </p>
+        </div>
+
+        <a href="{% url 'add_doctor_schedule' doctor.id %}"
+           class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Schedule
+        </a>
+    </div>
+
+    <!-- Doctor Information -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="mb-2">
+                <i class="fas fa-user-md text-primary"></i>
+                Dr. {{ doctor.full_name }}
+            </h5>
+
+            <p class="text-muted mb-0">
+                Doctor ID: {{ doctor.doctor_id }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Schedule Table -->
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Weekly Working Schedule</h5>
+        </div>
+
+        <div class="card-body">
+
+            {% if schedules %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Day</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Appointment Duration</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for schedule in schedules %}
+
+                        <tr>
+                            <td>
+                                <strong>
+                                    {{ schedule.day_of_week }}
+                                </strong>
+                            </td>
+
+                            <td>
+                                {{ schedule.start_time|time:"h:i A" }}
+                            </td>
+
+                            <td>
+                                {{ schedule.end_time|time:"h:i A" }}
+                            </td>
+
+                            <td>
+                                {{ schedule.appointment_duration }} minutes
+                            </td>
+
+                            <td>
+                                {% if schedule.is_available %}
+                                    <span class="badge bg-success">
+                                        Available
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-danger">
+                                        Unavailable
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <a href="{% url 'edit_doctor_schedule' schedule.id %}"
+                                   class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+
+                                <a href="{% url 'delete_doctor_schedule' schedule.id %}"
+                                   class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <!-- Empty Schedule -->
+            <div class="text-center py-5">
+
+                <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+
+                <h5>No Schedule Found</h5>
+
+                <p class="text-muted">
+                    This doctor has not added any working schedules yet.
+                </p>
+
+                <a href="{% url 'add_doctor_schedule' doctor.id %}"
+                   class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Create First Schedule
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-4">
+        <a href="{% url 'doctor_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Doctors
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

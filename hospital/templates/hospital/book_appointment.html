@@ -1,0 +1,548 @@
+
+{% extends 'hospital/base.html' %}
+
+{% block title %}Book Appointment - MediCare{% endblock %}
+
+{% block page_title %}Book Appointment{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                Book Appointment
+            </h2>
+
+            <p class="text-muted mb-0">
+                Select a date and available time slot
+            </p>
+        </div>
+
+        <a href="{% url 'appointment_departments' %}"
+           class="btn btn-outline-primary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Doctors
+
+        </a>
+
+    </div>
+
+
+    <!-- Doctor Information -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-center">
+
+                <div class="rounded-circle bg-primary bg-opacity-10
+                            d-flex align-items-center justify-content-center me-3"
+                     style="width: 70px; height: 70px;">
+
+                    <i class="bi bi-person-badge text-primary"
+                       style="font-size: 32px;"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="fw-bold mb-1">
+                        Dr. {{ doctor.full_name }}
+                    </h3>
+
+                    <p class="text-muted mb-1">
+                        {{ doctor.specialization }}
+                    </p>
+
+                    <p class="mb-0">
+                        Consultation Fee:
+                        <strong>
+                            Rs. {{ doctor.consultation_fee }}
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Weekly Schedule -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white border-0 pt-4">
+
+            <h5 class="fw-bold mb-1">
+                <i class="bi bi-calendar-week text-primary me-2"></i>
+                Doctor's Weekly Schedule
+            </h5>
+
+            <p class="text-muted mb-0">
+                Regular working hours of Dr. {{ doctor.full_name }}
+            </p>
+
+        </div>
+
+        <div class="card-body">
+
+            {% if weekly_schedules %}
+
+                <div class="row g-3">
+
+                    {% for item in weekly_schedules %}
+
+                        <div class="col-md-6 col-lg-4">
+
+                            <div class="border rounded-3 p-3 h-100">
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                                    <strong>
+                                        {{ item.day_of_week }}
+                                    </strong>
+
+                                    <span class="badge bg-success">
+                                        Available
+                                    </span>
+
+                                </div>
+
+                                <div class="text-muted">
+
+                                    <i class="bi bi-clock me-1"></i>
+
+                                    {{ item.start_time|time:"h:i A" }}
+                                    -
+                                    {{ item.end_time|time:"h:i A" }}
+
+                                </div>
+
+                                <small class="text-muted">
+                                    {{ item.appointment_duration }}
+                                    minute appointments
+                                </small>
+
+                                <!-- Weekly Breaks -->
+                                {% for break in item.breaks.all %}
+
+                                    <div class="mt-2 p-2 rounded bg-warning bg-opacity-10">
+
+                                        <small class="fw-semibold text-warning">
+
+                                            <i class="bi bi-cup-hot me-1"></i>
+                                            {{ break.break_name }}
+
+                                        </small>
+
+                                        <div class="small text-muted">
+
+                                            {{ break.start_time|time:"h:i A" }}
+                                            -
+                                            {{ break.end_time|time:"h:i A" }}
+
+                                        </div>
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="alert alert-warning mb-0">
+
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+
+                    No schedule has been added for this doctor yet.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Select Date -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white border-0 pt-4">
+
+            <h5 class="fw-bold mb-1">
+
+                <i class="bi bi-calendar3 text-primary me-2"></i>
+                Select Appointment Date
+
+            </h5>
+
+            <p class="text-muted mb-0">
+                Choose a date to see available appointment slots
+            </p>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="GET"
+                  action="{% url 'book_appointment' doctor.id %}">
+
+                <div class="row align-items-end">
+
+                    <div class="col-md-8">
+
+                        <label class="form-label fw-semibold">
+                            Appointment Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date"
+                            class="form-control form-control-lg"
+                            value="{{ selected_date|date:'Y-m-d' }}"
+                            min="{{ today|date:'Y-m-d' }}"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="col-md-4 mt-3 mt-md-0">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-lg w-100">
+
+                            <i class="bi bi-search me-1"></i>
+                            Check Slots
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Available Slots -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white border-0 pt-4">
+
+            <h5 class="fw-bold mb-1">
+
+                <i class="bi bi-clock text-primary me-2"></i>
+                Available Slots
+
+            </h5>
+
+            <p class="text-muted mb-0">
+                {{ selected_date|date:"l, F d, Y" }}
+            </p>
+
+        </div>
+
+        <div class="card-body">
+
+        {% if schedules_for_date %}
+
+                <div class="alert alert-info">
+
+    <i class="bi bi-info-circle me-2"></i>
+
+    Dr. {{ doctor.full_name }} has the following working hours:
+
+    {% for item in schedules_for_date %}
+
+        <div class="mt-2">
+
+            <strong>
+                {{ item.start_time|time:"h:i A" }}
+                -
+                {{ item.end_time|time:"h:i A" }}
+            </strong>
+
+            <span class="text-muted">
+                ({{ item.appointment_duration }} minute appointments)
+            </span>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+                {% if slots %}
+
+                    <div class="row g-3">
+
+                        {% for slot in slots %}
+
+                            {% if slot.type == 'break' %}
+
+                                <!-- Doctor Break -->
+                                <div class="col-12">
+
+                                    <div class="alert alert-warning text-center mb-2">
+
+                                        <strong>
+
+                                            <i class="bi bi-cup-hot me-1"></i>
+
+                                            {{ slot.break_name }}
+
+                                        </strong>
+
+                                        <div class="mt-1">
+
+                                            {{ slot.start_time|time:"h:i A" }}
+
+                                            -
+
+                                            {{ slot.end_time|time:"h:i A" }}
+
+                                        </div>
+
+                                        <small class="text-muted">
+
+                                            Doctor is unavailable during this period.
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            {% else %}
+
+                                <!-- Appointment Slot -->
+                                <div class="col-md-4 col-lg-3">
+
+                                    {% if slot.booked %}
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-danger w-100 py-3"
+                                            disabled>
+
+                                            <i class="bi bi-x-circle me-1"></i>
+
+                                            {{ slot.time|time:"h:i A" }}
+
+                                            <br>
+
+                                            <small>
+                                                Booked
+                                            </small>
+
+                                        </button>
+
+                                    {% else %}
+
+                                        <a
+                                            href="?date={{ selected_date|date:'Y-m-d' }}&time={{ slot.time|time:'H:i:s' }}"
+                                            class="btn btn-outline-success w-100 py-3">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+
+                                            {{ slot.time|time:"h:i A" }}
+
+                                            <br>
+
+                                            <small>
+                                                Available
+                                            </small>
+
+                                        </a>
+
+                                    {% endif %}
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="alert alert-warning mb-0">
+
+                        <i class="bi bi-info-circle me-2"></i>
+
+                        No appointment slots are available for this date.
+
+                    </div>
+
+                {% endif %}
+
+            {% else %}
+
+                <div class="alert alert-warning mb-0">
+
+                    <i class="bi bi-calendar-x me-2"></i>
+
+                    Dr. {{ doctor.full_name }}
+                    does not have a schedule on
+
+                    <strong>
+                        {{ selected_date|date:"l" }}
+                    </strong>.
+
+                    <br>
+
+                    Please select another date.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Booking Form -->
+    {% if selected_time and schedule %}
+
+        <div class="card border-0 shadow-sm mb-4"
+             id="bookingForm">
+
+            <div class="card-header bg-white border-0 pt-4">
+
+                <h5 class="fw-bold">
+
+                    <i class="bi bi-person-plus text-primary me-2"></i>
+
+                    Confirm Appointment
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="alert alert-success">
+
+                    <strong>
+                        Selected Slot:
+                    </strong>
+
+                    {{ selected_date|date:"l, F d, Y" }}
+
+                    at
+
+                    <strong>
+                        {{ selected_time|time:"h:i A" }}
+                    </strong>
+
+                </div>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <!-- Appointment Date -->
+                    <input
+                        type="hidden"
+                        name="appointment_date"
+                        value="{{ selected_date|date:'Y-m-d' }}"
+                    >
+
+                    <!-- Appointment Time -->
+                    <input
+                        type="hidden"
+                        name="appointment_time"
+                        value="{{ selected_time|time:'H:i:s' }}"
+                    >
+
+
+                    <!-- Patient -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Select Patient
+                        </label>
+
+                        <select
+                            name="patient"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                -- Select Patient --
+                            </option>
+
+                            {% for patient in patients %}
+
+                                <option value="{{ patient.id }}">
+                                    {{ patient.full_name }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Reason -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold">
+                            Reason for Visit
+                        </label>
+
+                        <textarea
+                            name="reason"
+                            class="form-control"
+                            rows="4"
+                            placeholder="Enter reason for appointment..."
+                            required></textarea>
+
+                    </div>
+
+
+                    <!-- Confirm Button -->
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-lg">
+
+                        <i class="bi bi-calendar-check me-1"></i>
+
+                        Confirm Appointment
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
